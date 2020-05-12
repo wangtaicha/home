@@ -4,12 +4,14 @@ import VueRouter from 'vue-router'
 // 注册
 // 引入vue
 import Vue from 'vue'
+// 一级路由
+import Login from '@/views/login' // 登录组件
 Vue.use(VueRouter)
 // 初始化
 const router = new VueRouter({
-  routes: [{
-    path: ''
-  }]
+  routes: [
+    { path: '/login', component: Login }
+  ]
 })
 
 export default router

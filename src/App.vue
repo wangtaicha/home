@@ -1,14 +1,14 @@
 <template>
   <div id="app">
-      <h1>Hello Vue</h1>
-      <el-button type="primary">主要按钮</el-button>
+    <!-- 一级路由 -->
+     <router-view></router-view>
   </div>
 </template>
 
 <script>
 
 export default {
-  name: 'App'
+  name: 'app'
 }
 </script>
 

@@ -72,8 +72,19 @@ export default {
       //   console.log(this.$refs.loginForm)
       this.$refs.loginForm.validate((valid) => {
         // valid如果为true, name校验成功
-        if (!valid) {
+        // console.log(valid)
+        if (valid) {
           // 进行登录
+          // 请求方式:post
+          // 请求地址:http://ttapi.research.itcast.cn/mp/v1_0/authorizations
+          // 请求参数:请求体:{mobile,code}
+          // 响应内容: 用户相关的信息
+          this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
+            this.loginForm).then(res => {
+            this.$router.push('/')
+          }).catch(() => {
+            this.$message.error('手机号或验证码错误')
+          })
         }
       })
     }

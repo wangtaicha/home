@@ -1,8 +1,8 @@
 // 导包
 import Vue from 'vue'
 import App from './App.vue'
-// 导入axios
-import axios from 'axios'
+// 导入自己配置的axios
+import axios from '@/api'
 // 导入路由
 import router from '@/router'
 // 引入饿了么UI

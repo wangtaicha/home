@@ -71,7 +71,7 @@ export default {
       // 对整体表单进行校验
       // 通过this.$refs.loginForm就可以拿到组件实例
       //   console.log(this.$refs.loginForm)
-      this.$refs.loginForm.validate((valid) => {
+      this.$refs.loginForm.validate(async (valid) => {
         // valid如果为true, name校验成功
         // console.log(valid)
         if (valid) {
@@ -80,15 +80,32 @@ export default {
           // 请求地址:http://ttapi.research.itcast.cn/mp/v1_0/authorizations
           // 请求参数:请求体:{mobile,code}
           // 响应内容: 用户相关的信息
-          this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
-            this.loginForm).then(res => {
-            // 响应报文对象(响应状态行,响应头,响应主体,res.data)
-            // 本地存储用户信息,使用auth.js模块中setUser函数
-            auth.setUser(res.data.data) // 这才用户信息
+          // this.$http.post('authorizations',
+          //   this.loginForm).then(res => {
+          //   // 响应报文对象(响应状态行,响应头,响应主体,res.data)
+          //   // 本地存储用户信息,使用auth.js模块中setUser函数
+          //   auth.setUser(res.data.data) // 这才用户信息
+          //   this.$router.push('/')
+          // }).catch(() => {
+          //   this.$message.error('手机号或验证码错误')
+          // })
+          // 异常情况
+          try {
+            // 前置知识
+            // 可能回出现异常的代码写在try里面
+            // 1 发起请求
+            const res = await this.$http.post('authorizations', this.loginForm)
+            // 2 保存用户信息
+            auth.setUser(res.data.data)
+            // 3 进行登录
             this.$router.push('/')
-          }).catch(() => {
+          } catch (e) {
+            // 默认传参
+            // e:错误对象
+            // 如果代码出现异常,会调用该函数
             this.$message.error('手机号或验证码错误')
-          })
+          }
+          // 1 捕获异常
         }
       })
     }

@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import auth from '@/utils/auth'
 export default {
   name: 'app-login',
   data () {
@@ -45,8 +46,8 @@ export default {
     return {
       // 表单对应的数据对象
       loginForm: {
-        mobile: '',
-        code: ''
+        mobile: '13911111111',
+        code: '246810'
       },
       // 校验规则
       loginRules: {
@@ -81,6 +82,9 @@ export default {
           // 响应内容: 用户相关的信息
           this.$http.post('http://ttapi.research.itcast.cn/mp/v1_0/authorizations',
             this.loginForm).then(res => {
+            // 响应报文对象(响应状态行,响应头,响应主体,res.data)
+            // 本地存储用户信息,使用auth.js模块中setUser函数
+            auth.setUser(res.data.data) // 这才用户信息
             this.$router.push('/')
           }).catch(() => {
             this.$message.error('手机号或验证码错误')

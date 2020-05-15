@@ -47,17 +47,17 @@
           <span class="icon el-icon-s-fold" @click="toggleMenu"></span>
           <span class="text">江苏传智播客科技教育有限公司</span>
           <!-- 右边下拉菜单 -->
-          <el-dropdown class="my-dropdown">
+          <el-dropdown class="my-dropdown" @command="handleClick">
           <span class="el-dropdown-link">
           <!-- 用户头像 -->
-          <img class="head" src="../../assets/avatar.jpg" alt="">
+          <img class="head" :src="photo" alt="">
           <!-- 用户名称 -->
-          <strong class="name">你家小琦哥哥</strong>
+          <strong class="name">{{name}}</strong>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown">
-            <el-dropdown-item>个人设置</el-dropdown-item>
-            <el-dropdown-item>退出登录</el-dropdown-item>
+            <el-dropdown-item command="setting">个人设置</el-dropdown-item>
+            <el-dropdown-item command="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
         </el-header>
@@ -70,14 +70,42 @@
 </template>
 
 <script>
+// 导入auth模块
+import auth from '../../utils/auth'
 export default {
   name: 'app-home',
   data () {
     return {
-      isOpen: true
+      isOpen: true,
+      name: '',
+      photo: ''
     }
   },
+  created () {
+    // 获取用户信息
+    this.getuserInfo()
+  },
   methods: {
+    // 处理下拉菜单的点击
+    handleClick (command) {
+      // 跳转到个人设置
+      if (command === 'setting') {
+        this.$router.push('/setting')
+      }
+      // 退出登录
+      if (command === 'logout') {
+        // 先清除token
+        auth.delUser()
+        // 在退出登录
+        this.$router.push('/login')
+      }
+    },
+    // 获取用户信息函数
+    getuserInfo () {
+      const user = auth.getUser()
+      this.name = user.name
+      this.photo = user.photo
+    },
     toggleMenu () {
       // 切换状态 展开状态,收起的状态
       this.isOpen = !this.isOpen

@@ -23,9 +23,9 @@
           <el-select v-model="filterData.channel_id" placeholder="请选择">
             <el-option
               v-for="item in channelOptions"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
+              :key="item.id"
+              :label="item.name"
+              :value="item.id"
             ></el-option>
           </el-select>
         </el-form-item>
@@ -84,6 +84,18 @@ export default {
       // 日期范围数据[起始日期,结束日期]
       // 但是选择完成日期后,可以根据这数据给begin_pubdate和end_pubdate进行赋值
       dateArr: []
+    }
+  },
+  created () {
+    // 获取频道数据
+    this.getChannelOption()
+  },
+  methods: {
+    // 获取频道列表
+    async getChannelOption () {
+      const res = await this.$http.get('channels')
+      // console.log(res.data.data.channels)
+      this.channelOptions = res.data.data.channels
     }
   }
 }

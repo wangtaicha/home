@@ -1,6 +1,6 @@
 <template>
     <div class='container'>
-        <slot name="up" age="18"></slot>
+        <slot name="up" age="18" sex="男"></slot>
         <div>测试插槽</div>
         <slot name="down"></slot>
     </div>

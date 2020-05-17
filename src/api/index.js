@@ -4,11 +4,25 @@ import axios from 'axios'
 import auth from '@/utils/auth'
 // 导入路由模块
 import router from '@/router'
+// 导入jsonbigint
+import JSONBIGINT from 'json-bigint'
 // 对axios进行配置
 // 配置基准地址
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0/'
 // 配置请求头tiken配置
 // axios.defaults.headers.Authorization = `Bearer ${auth.getUser().token}`
+// 配置转换格式
+axios.defaults.transformResponse = [(data) => {
+  // 进行格式的转换 data有可能不是json格式 极端情况, 这个极端情况有可能会发生的
+  // data如果不是json格式 return JSONBIGINT.parse(data) 这句代码可能会报错
+  try {
+    // 如果这句代码出现异常  正常转换
+    return JSONBIGINT.parse(data)
+  } catch (e) {
+    // 转换异常 那就还是使用原始数据
+    return data
+  }
+}]
 // 配置请求拦截器interceptors
 axios.interceptors.request.use(config => {
   // 获取本地token 如果有token就追加

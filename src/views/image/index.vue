@@ -12,7 +12,7 @@
           <el-radio-button :label="false">全部</el-radio-button>
           <el-radio-button :label="true">收藏</el-radio-button>
         </el-radio-group>
-        <el-button type="success" style="float:right" size="small">添加素材</el-button>
+        <el-button @click="openDialog()" type="success" style="float:right" size="small">添加素材</el-button>
       </div>
       <!-- 列表 -->
       <div class="img-list">
@@ -35,14 +35,33 @@
         :total="total"
       ></el-pagination>
     </el-card>
+    <!-- 对话框 -->
+      <el-dialog
+      title="添加素材"
+      :visible.sync="dialogVisible"
+      width="300px">
+        <el-upload
+          class="avatar-uploader"
+          action="http://ttapi.research.itcast.cn/mp/v1_0/user/images"
+          name="image"
+          :headers="uploadHeaders"
+          :show-file-list="false"
+          :on-success="uploadSuccess">
+          <img v-if="imageUrl" :src="imageUrl" class="avatar">
+          <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+      </el-upload>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import auth from '@/utils/auth'
 export default {
   name: 'app-image',
   data () {
     return {
+      // 控制对话框
+      dialogVisible: false,
       // 查询条件
       resParams: {
         collect: false,
@@ -52,7 +71,13 @@ export default {
       // 素材列表
       images: [],
       // 总条数
-      total: 0
+      total: 0,
+      // 预览图片地址
+      imageUrl: '',
+      // 上传携带的请求头
+      uploadHeaders: {
+        Authorization: `Bearer ${auth.getUser().token}`
+      }
     }
   },
   created () {
@@ -60,6 +85,24 @@ export default {
     this.getImages()
   },
   methods: {
+    // 上传成功
+    uploadSuccess (res) {
+      // 提示+预览
+      this.$message.success('上传成功')
+      // console.log(res)
+      this.imageUrl = res.data.url
+      // 关闭对话框 + 更新当前列表
+      window.setTimeout(() => {
+        this.dialogVisible = false
+        this.getImages()
+      }, 3000)
+    },
+    // 打开对话框
+    openDialog () {
+      // 1. 准备一个对话框
+      // 2. 再来打开对话框
+      this.dialogVisible = true
+    },
     // 删除图片功能
     delImage (id) {
       this.$confirm('亲,确认要删除此素材吗', '提示', {
@@ -68,7 +111,6 @@ export default {
         type: 'warning'
       })
         .then(async () => {
-          // console.log('删除成功')
           try {
             // 理想情况
             await this.$http.delete(`/user/images/${id}`)
@@ -106,6 +148,7 @@ export default {
 </script>
 
 <style lang="less" scoped>
+// 样式列表
 .img-list {
   .img-item {
     width: 180px;

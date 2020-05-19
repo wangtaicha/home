@@ -10,6 +10,8 @@ import router from '@/router'
 // 引入饿了么UI
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+// 导入公共样式 自己的样式 注意:要写在饿了么样式的下方 才能覆盖样式
+import '@/styles/index.less'
 // 注册自己的组件
 Vue.use(plugin)
 // 使用ElementUI

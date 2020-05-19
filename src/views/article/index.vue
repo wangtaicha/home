@@ -145,7 +145,7 @@ export default {
           try {
             // 理想情况
             await this.$http.delete(`/articles/${id}`)
-            this.$message.success('恭喜:你把我丢了')
+            this.$message.success('恭喜:你把我丢掉了')
             this.getArticles()
           } catch (e) {
             this.$message.error('呦呵,你没把我丢掉')

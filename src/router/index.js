@@ -10,8 +10,9 @@ import Login from '@/views/login' // 登录组件
 import Home from '@/views/home' // home组件
 import Welcome from '@/views/welcome' // Welcome组件 欢迎页面
 import Notfound from '@/views/404' // notFound组件 404页面
-import Article from '@/views/article' // notFound组件 404页面
-import Image from '@/views/image' // notFound组件 404页面
+import Article from '@/views/article' // article组件 内容管理页面
+import Image from '@/views/image' // image组件 素材管理页面
+import Publish from '@/views/publish' // notFound组件 发布文章页面
 Vue.use(VueRouter)
 // 初始化
 const router = new VueRouter({
@@ -23,7 +24,8 @@ const router = new VueRouter({
       children: [
         { path: '/', component: Welcome },
         { path: '/article', component: Article },
-        { path: '/image', component: Image }
+        { path: '/image', component: Image },
+        { path: '/publish', component: Publish }
       ]
     }, // home
     // 通配规则(以上所有的规则不符合的时候,会走这个规则)

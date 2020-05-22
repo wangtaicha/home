@@ -19,21 +19,14 @@
             <el-radio :label="4">已删除</el-radio>
           </el-radio-group>
         </el-form-item>
+        <!-- 频道 -->
         <el-form-item label="频道: ">
-          <el-select
-            @change="changeChannel"
-            v-model="filterData.channel_id"
-            placeholder="请选择"
-            clearable
-          >
-            <el-option
-              v-for="item in channelOptions"
-              :key="item.id"
-              :label="item.name"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <!-- 频道组件 此时my-channel已经实现了双向绑定-->
+          <!-- 下面是完整写法, 可以简写为<my-channel v-model="filterData.channel_id">-->
+          <my-channel v-model="filterData.channel_id"></my-channel>
+          <!-- <my-channel :value="filterData.channel_id" @input="filterData.channel_id=$event"></my-channel> -->
         </el-form-item>
+        <!-- 日期 -->
         <el-form-item label="日期: ">
           <el-date-picker
             v-model="dateArr"
@@ -128,7 +121,7 @@ export default {
   },
   created () {
     // 获取频道数据
-    this.getChannelOption()
+    // this.getChannelOption()
     // 获取文章数据
     this.getArticles()
   },
@@ -158,12 +151,12 @@ export default {
       console.log(id)
       this.$router.push(`/pubilsh?id=${id}`)
     },
-    // 频道改变后
-    changeChannel () {
-      if (this.filterData.channel_id === '') {
-        this.filterData.channel_id = null
-      }
-    },
+    // // 频道改变后
+    // changeChannel () {
+    //   if (this.filterData.channel_id === '') {
+    //     this.filterData.channel_id = null
+    //   }
+    // },
     // 筛选
     search () {
       this.filterData.page = 1
@@ -186,12 +179,12 @@ export default {
       this.filterData.page = newPage
       this.getArticles()
     },
-    // 获取频道列表
-    async getChannelOption () {
-      const res = await this.$http.get('channels')
-      // console.log(res)
-      this.channelOptions = res.data.data.channels
-    },
+    // // 获取频道列表
+    // async getChannelOption () {
+    //   const res = await this.$http.get('channels')
+    //   // console.log(res)
+    //   this.channelOptions = res.data.data.channels
+    // },
     // 获取文章数据
     async getArticles () {
       const res = await this.$http.get('articles', { params: this.filterData })

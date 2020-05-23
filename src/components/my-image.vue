@@ -2,7 +2,7 @@
   <div class="my-image">
     <!-- 图片按钮 -->
     <div class="img_btn" @click="openDialog()">
-      <img src="../assets/default.png" alt />
+      <img :src="value || imageBtnUrl" alt />
     </div>
     <!-- 对话框 -->
     <el-dialog :visible.sync="dialogVisible" width="750px">
@@ -53,7 +53,7 @@
       </el-tabs>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        <el-button type="primary" @click="confirmImage()">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -61,8 +61,11 @@
 
 <script>
 import auth from '@/utils/auth'
+// 主动导入,打包这张图片到服务器,defaultImage就是图片数据
+import defaultImage from '@/assets/default.png'
 export default {
   name: 'my-image',
+  props: ['value'],
   data () {
     return {
       // 素材列表
@@ -75,6 +78,7 @@ export default {
       uploadHeaders: { // 请求头配置
         Authorization: `Bearer ${auth.getUser().token}`
       },
+      imageBtnUrl: defaultImage, // btn按钮的图片地址
       upLoadImageUrl: null, // 选择的图片默认为空
       // 获取素材列表参数对象
       resParams: {
@@ -85,6 +89,22 @@ export default {
     }
   },
   methods: {
+    // 确认图片
+    confirmImage () {
+      if (this.activeName === 'list') {
+        if (!this.selectedImageUrl) return this.$message.warning('请选择一张图片')
+        // 不是给imageBtnUrl了
+        // this.imageBtnUrl = this.selectedImageUrl
+        // 提交给父组件
+        this.$emit('input', this.selectedImageUrl)
+      } else {
+        if (!this.upLoadImageUrl) return this.$message.warning('请选择一张图片')
+        // this.imageBtnUrl = this.upLoadImageUrl
+        // 提交给父组件
+        this.$emit('input', this.upLoadImageUrl)
+      }
+      this.dialogVisible = false
+    },
     // 上传图片
     uploadSuccess (res) {
       // 上传成功
@@ -112,6 +132,12 @@ export default {
       this.dialogVisible = true
       // 要在点开对话框的时候获取素材
       this.getImages()
+      // 默认激活第一个选项卡
+      this.activeName = 'list'
+      // 清除选中默认图片
+      this.selectedImageUrl = ''
+      // 清除上传图片的地址
+      this.upLoadImageUrl = ''
     },
     // 获取素材列表
     async getImages () {
@@ -167,7 +193,7 @@ export default {
 //封面组件
 .my-image {
   display: inline-block;
-  margin-left: 20px;
+  margin-right: 20px;
 }
 .img_btn {
   width: 150px;

@@ -128,9 +128,8 @@ export default {
       this.getImages()
     },
     // 切换分页
-    pager (newVal) {
-      console.log(newVal)
-      this.resParams.page = newVal
+    pager (newPage) {
+      this.resParams.page = newPage
       this.getImages()
     },
     // 获取素材

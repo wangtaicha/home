@@ -1,11 +1,11 @@
 <template>
-    <div class='container-publish'>
-      <el-card>
-        <!-- 头部 面包屑 -->
-        <div slot="header">
-            <my-bread>发布文章</my-bread>
-        </div>
-             <!-- 表单 -->
+  <div class="container-publish">
+    <el-card>
+      <!-- 头部 面包屑 -->
+      <div slot="header">
+        <my-bread>{{$route.query.id?'修改':'发布'}}文章</my-bread>
+      </div>
+      <!-- 表单 -->
       <el-form label-width="120px">
         <el-form-item label="标题: ">
           <el-input v-model="articleForm.title" style="width:400px" placeholder="请输入文章标题"></el-input>
@@ -33,13 +33,16 @@
         <el-form-item label="频道: ">
           <my-channel v-model="articleForm.channel_id"></my-channel>
         </el-form-item>
-        <el-form-item>
+        <el-form-item v-if="$route.query.id">
+          <el-button type="success" @click="update">修改文章</el-button>
+        </el-form-item>
+        <el-form-item v-else>
           <el-button @click="submit(false)" type="primary">发布文章</el-button>
           <el-button @click="submit(true)" type="info">存入草稿</el-button>
         </el-form-item>
       </el-form>
-      </el-card>
-    </div>
+    </el-card>
+  </div>
 </template>
 
 <script>
@@ -81,7 +84,60 @@ export default {
       }
     }
   },
+  watch: {
+    // 监听地址栏id的变化
+    '$route.query.id': function () {
+      this.toggleFormInfo()
+    }
+  },
+  created () {
+    if (this.$route.query.id) {
+      this.getArticleInfo()
+    }
+  },
   methods: {
+    // 修改文章
+    async update () {
+      try {
+        // 修改只有发布,没有草稿
+        // 路径传参,需要id
+        // 键值对传参 需要draft
+        // 请求体传参 articleForm
+        await this.$http.put(`articles/${this.articleForm.id}?draft=false`, this.articleForm)
+        this.$message.success('修改成功')
+        this.$router.push('/article')
+      } catch (e) {
+        this.$message.error('操作失败')
+      }
+    },
+    // 切换表单内容
+    toggleFormInfo () {
+      if (this.$route.query.id) {
+        // 修改
+        this.getArticleInfo()
+      } else {
+        // 发布
+        // 文章数据
+        // this.articleForm = {} // 不能这样清空表单
+        // 保证模板依赖的字段都有数据, 保证模板编译不出错
+        this.articleForm = {
+          title: null, // 标题
+          channel_id: null, // 文章所属频道id
+          content: null, // 文章内容
+          cover: {
+            type: 1,
+            images: []
+          }
+        }
+      }
+    },
+    // 获取文章信息
+    async getArticleInfo () {
+      const res = await this.$http.get(`articles/${this.$route.query.id}`)
+      // console.log(res)
+      this.articleForm = res.data.data
+    },
+    // 提交
     async submit (draft) {
       try {
         // 理想情况下

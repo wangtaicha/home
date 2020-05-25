@@ -128,6 +128,7 @@ export default {
   methods: {
     // 删除文章
     delArtiles (id) {
+      // console.log(id)
       this.$confirm('亲,确认要删除此篇文章吗', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -148,8 +149,8 @@ export default {
     },
     // 跳转编辑
     toEditArticle (id) {
-      console.log(id)
-      this.$router.push(`/pubilsh?id=${id}`)
+      // console.log(id)
+      this.$router.push(`/publish?id=${id}`)
     },
     // // 频道改变后
     // changeChannel () {

@@ -13,6 +13,7 @@ import Notfound from '@/views/404' // notFound组件 404页面
 import Article from '@/views/article' // article组件 内容管理页面
 import Image from '@/views/image' // image组件 素材管理页面
 import Comment from '@/views/comment' // comment 评论管理页面
+import Fans from '@/views/fans' // comment 评论管理页面
 import Publish from '@/views/publish' // notFound组件 发布文章页面
 Vue.use(VueRouter)
 // 初始化
@@ -27,7 +28,8 @@ const router = new VueRouter({
         { path: '/article', component: Article },
         { path: '/image', component: Image },
         { path: '/publish', component: Publish },
-        { path: '/comment', component: Comment }
+        { path: '/comment', component: Comment },
+        { path: '/fans', component: Fans }
       ]
     }, // home
     // 通配规则(以上所有的规则不符合的时候,会走这个规则)

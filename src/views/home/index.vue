@@ -71,6 +71,8 @@
 </template>
 
 <script>
+// 导入eventBus
+import eventBus from '@/eventBus'
 // 导入auth模块
 import auth from '../../utils/auth'
 export default {
@@ -85,6 +87,14 @@ export default {
   created () {
     // 获取用户信息
     this.getuserInfo()
+    // 修改用户名称
+    eventBus.$on('setgingUserName', (name) => {
+      this.name = name
+    })
+    // 修改用户头像
+    eventBus.$on('settingUserPhoto', (photo) => {
+      this.photo = photo
+    })
   },
   methods: {
     // 处理下拉菜单的点击
